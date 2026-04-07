@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Zahlenfuchs">
+<title>Zahlenfuchs 🦊 · Klasse 5–10</title>
+<!-- Inline SVG Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%231b4332'/%3E%3Cstop offset='100%25' stop-color='%232d6a4f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='128' height='128' rx='28' fill='url(%23bg)'/%3E%3Ctext x='64' y='90' font-size='80' text-anchor='middle' font-family='sans-serif'%3E🦊%3C/text%3E%3C/svg%3E">
+<!-- Apple Touch Icon (base64 PNG generated from SVG) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%231b4332'/%3E%3Cstop offset='100%25' stop-color='%232d6a4f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23bg)'/%3E%3Ctext x='90' y='125' font-size='110' text-anchor='middle' font-family='sans-serif'%3E🦊%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --surface2: #efeee9;
+  --border: #dddbd4;
+  --text: #1a1917;
+  --text2: #6b6860;
+  --text3: #9e9b94;
+  --accent: #2d6a4f;
+  --accent-light: #d8f3dc;
+  --accent-dark: #1b4332;
+  --warn: #e07c24;
+  --warn-bg: #fef3e2;
+  --danger: #c1292e;
+  --danger-bg: #fde8e8;
+  --correct: #2d6a4f;
+  --correct-bg: #d8f3dc;
+  --wrong: #c1292e;
+  --wrong-bg: #fde8e8;
+  --r: 12px;
+  --rs: 8px;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* iOS touch fixes */
+button, select, input, a { touch-action: manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.08); }
+select { -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6860' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-text-size-adjust: 100%;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+/* ── Header ── */
+.header {
+  width: 100%;
+  background: var(--accent-dark);
+  color: #fff;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-icon { font-size: 26px; }
+.header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
+.header p { font-size: 12px; opacity: 0.7; margin-top: 1px; }
+
+/* ── Container ── */
+.container {
+  width: 100%;
+  max-width: 720px;
+  padding: 20px;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 40px;
+}
+
+/* ── Screens ── */
+.screen { display: none; }
+.screen.active { display: block; animation: fadeIn 0.25s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ── Setup Screen ── */
+.setup-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.setup-card h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.setup-card h2 span { font-size: 18px; }
+
+label.lbl {
+  font-size: 12px;
+  color: var(--text2);
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+select, input[type=number] {
+  font-family: var(--font);
+  font-size: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--rs);
+  padding: 9px 12px;
+  background: var(--surface);
+  color: var(--text);
+  width: 100%;
+  transition: border 0.15s;
+  -webkit-appearance: none;
+}
+select:focus, input:focus { outline: none; border-color: var(--accent); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* ── Topic Chips ── */
+.topic-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.topic-chip {
+  font-family: var(--font);
+  font-size: 13px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--text2);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+.topic-chip:hover { background: var(--surface2); color: var(--text); }
+.topic-chip.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.topic-chip.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ── Buttons ── */
+.btn {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: var(--rs);
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+.btn-start {
+  background: var(--accent);
+  color: #fff;
+  width: 100%;
+  font-size: 16px;
+  padding: 14px;
+  border-radius: var(--r);
+  margin-top: 8px;
+}
+.btn-start:hover { background: var(--accent-dark); }
+.btn-start:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 10px 22px;
+}
+.btn-secondary:hover { background: var(--surface2); }
+
+/* ── Quiz Screen ── */
+.quiz-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 10px 0;
+}
+.hud-item {
+  text-align: center;
+}
+.hud-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
+.hud-value { font-size: 22px; font-weight: 700; font-family: var(--mono); margin-top: 2px; }
+.hud-value.timer { color: var(--accent); }
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--surface2);
+  border-radius: 3px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.question-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 28px 24px;
+  text-align: center;
+  margin-bottom: 16px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.question-category {
+  font-size: 11px;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+}
+.question-text {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: var(--mono);
+  letter-spacing: -0.5px;
+  line-height: 1.4;
+  color: var(--text);
+}
+.question-text .frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
+  font-size: 22px;
+  line-height: 1.1;
+  margin: 0 4px;
+}
+.question-text .frac-num { border-bottom: 2px solid var(--text); padding: 0 6px 3px; }
+.question-text .frac-den { padding: 3px 6px 0; }
+
+.answer-area {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+.answer-input {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  width: 200px;
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--r);
+  background: var(--surface);
+  color: var(--text);
+  transition: border 0.15s;
+}
+.answer-input:focus { outline: none; border-color: var(--accent); }
+.answer-input.correct { border-color: var(--correct); background: var(--correct-bg); }
+.answer-input.wrong { border-color: var(--wrong); background: var(--wrong-bg); }
+
+.btn-check {
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  padding: 13px 24px;
+  border-radius: var(--r);
+  font-family: var(--font);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+.btn-check:hover { background: var(--accent-dark); }
+
+.feedback {
+  text-align: center;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: var(--rs);
+  margin-top: 12px;
+  display: none;
+}
+.feedback.correct { display: block; background: var(--correct-bg); color: var(--correct); }
+.feedback.wrong { display: block; background: var(--wrong-bg); color: var(--wrong); }
+
+.hint-text {
+  font-size: 12px;
+  color: var(--text3);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ── Results Screen ── */
+.result-hero {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 32px 24px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.result-emoji { font-size: 48px; margin-bottom: 10px; }
+.result-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.result-sub { font-size: 14px; color: var(--text2); }
+
+.result-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--rs);
+  padding: 14px;
+  text-align: center;
+}
+.stat-value { font-size: 26px; font-weight: 700; font-family: var(--mono); }
+.stat-label { font-size: 11px; color: var(--text3); margin-top: 3px; }
+.stat-value.green { color: var(--correct); }
+.stat-value.red { color: var(--wrong); }
+
+.result-detail {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.result-detail h3 {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.result-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--surface2);
+  font-size: 13px;
+  gap: 10px;
+}
+.result-row:last-child { border-bottom: none; }
+.result-icon { font-size: 16px; flex-shrink: 0; }
+.result-q { flex: 1; font-family: var(--mono); font-size: 13px; }
+.result-a { font-family: var(--mono); font-size: 13px; font-weight: 600; }
+.result-a.green { color: var(--correct); }
+.result-a.red { color: var(--wrong); }
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+}
+.result-actions .btn { flex: 1; text-align: center; }
+
+/* ── Worksheet Screen ── */
+.ws-toolbar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.ws-toolbar .lbl { font-size: 13px; color: var(--text); margin-bottom: 0; }
+
+.ws-page {
+  background: #fff;
+  padding: 32px 36px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+}
+.ws-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #1a1917;
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
+.ws-header-left h2 { font-size: 18px; font-weight: 700; margin-bottom: 2px; }
+.ws-header-left p { font-size: 12px; color: #666; }
+.ws-header-right { text-align: right; font-size: 12px; color: #666; line-height: 1.7; }
+.ws-name-line {
+  margin-bottom: 18px;
+  font-size: 13px;
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ws-grid {
+  display: grid;
+  gap: 0;
+}
+.ws-grid.cols-1 { grid-template-columns: 1fr; }
+.ws-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.ws-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+.ws-item {
+  padding: 8px 10px;
+  font-family: var(--mono);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #eee;
+}
+.ws-item-nr {
+  font-size: 12px;
+  color: #999;
+  min-width: 28px;
+  font-weight: 600;
+}
+.ws-item-q { flex: 1; }
+.ws-item-line {
+  flex: 0 0 60px;
+  border-bottom: 1px solid #aaa;
+  height: 1px;
+  margin-left: 8px;
+}
+.ws-item-answer {
+  font-weight: 600;
+  color: var(--accent-dark);
+  min-width: 60px;
+  text-align: right;
+}
+
+.ws-solution-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #1a1917;
+}
+.ws-solution-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2px 16px;
+}
+.ws-sol-item {
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 4px 0;
+  display: flex;
+  gap: 6px;
+}
+.ws-sol-nr { color: #999; min-width: 28px; font-size: 11px; font-weight: 600; }
+.ws-sol-q { color: #666; }
+.ws-sol-a { font-weight: 700; color: #1a1917; }
+
+/* ── Print Styles ── */
+@media print {
+  body { background: #fff !important; }
+  .header, .no-print { display: none !important; }
+  .container { max-width: 100% !important; padding: 0 !important; }
+  .screen { display: none !important; }
+  #screen-worksheet { display: block !important; }
+  .ws-page {
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 20px 24px !important;
+    margin: 0 !important;
+    page-break-after: always;
+    box-shadow: none !important;
+  }
+  .ws-page:last-child { page-break-after: auto; }
+  .ws-item { font-size: 14px; }
+  .ws-toolbar { display: none !important; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .container { padding: 12px; }
+  .grid3 { grid-template-columns: 1fr; gap: 10px; }
+  .grid2 { grid-template-columns: 1fr; gap: 10px; }
+  .setup-card { padding: 16px; }
+  .setup-card h2 { font-size: 15px; }
+
+  /* Bigger touch targets for topic chips */
+  .topic-grid { gap: 8px; }
+  .topic-chip {
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  /* Select dropdowns bigger on mobile */
+  select, input[type=number] { font-size: 16px; padding: 12px 14px; min-height: 44px; }
+
+  /* Buttons bigger */
+  .btn-start { font-size: 16px; padding: 16px; min-height: 50px; }
+  .btn-secondary { min-height: 44px; }
+  .btn-check { min-height: 50px; padding: 14px 20px; font-size: 16px; }
+
+  /* Quiz */
+  .question-text { font-size: 24px; }
+  .answer-input { font-size: 22px; width: 100%; min-height: 50px; }
+  .answer-area { flex-direction: column; gap: 8px; }
+  .question-card { padding: 20px 16px; min-height: 130px; }
+
+  /* Results */
+  .result-stats { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .stat-card { padding: 10px 6px; }
+  .stat-value { font-size: 20px; }
+
+  /* Worksheet toolbar */
+  .ws-toolbar { flex-direction: column; align-items: stretch; gap: 8px; }
+  .ws-toolbar .btn { text-align: center; min-height: 44px; }
+
+  /* Start buttons row */
+  .start-buttons { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-icon">🦊</span>
+  <div>
+    <h1>Zahlenfuchs</h1>
+    <p>Kopfrechentrainer · Klasse 5–10 · A/B/C-Kurs</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ══ SETUP ══ -->
+  <div id="screen-setup" class="screen active">
+
+    <div class="setup-card">
+      <h2><span>🎯</span> Einstellungen</h2>
+      <div class="grid3" style="margin-bottom:14px">
+        <div>
+          <label class="lbl">Klasse</label>
+          <select id="s-klasse" onchange="updateTopics()">
+            <option value="5">Klasse 5</option>
+            <option value="6">Klasse 6</option>
+            <option value="7">Klasse 7</option>
+            <option value="8">Klasse 8</option>
+            <option value="9">Klasse 9</option>
+            <option value="10">Klasse 10</option>
+          </select>
+        </div>
+        <div>
+          <label class="lbl">Kurs</label>
+          <select id="s-kurs">
+            <option value="C">C-Kurs (Grund)</option>
+            <option value="B" selected>B-Kurs (Mittel)</option>
+            <option value="A">A-Kurs (Erweitert)</option>
+          </select>
+        </div>
+        <div>
+          <label class="lbl">Anzahl Aufgaben</label>
+          <select id="s-anzahl">
+            <option value="10">10 Aufgaben</option>
+            <option value="15">15 Aufgaben</option>
+            <option value="20" selected>20 Aufgaben</option>
+            <option value="30">30 Aufgaben</option>
+            <option value="50">50 Aufgaben</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div>
+          <label class="lbl">Zeitlimit pro Aufgabe</label>
+          <select id="s-zeit">
+            <option value="0">Kein Limit</option>
+            <option value="10">10 Sekunden</option>
+            <option value="15">15 Sekunden</option>
+            <option value="20" selected>20 Sekunden</option>
+            <option value="30">30 Sekunden</option>
+            <option value="45">45 Sekunden</option>
+            <option value="60">60 Sekunden</option>
+          </select>
+        </div>
+        <div>
+          <label class="lbl">Zahlenbereich</label>
+          <select id="s-range">
+            <option value="auto" selected>Automatisch (nach Klasse)</option>
+            <option value="small">Klein (bis 20)</option>
+            <option value="medium">Mittel (bis 100)</option>
+            <option value="large">Groß (bis 1000)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="setup-card">
+      <h2><span>📚</span> Themengebiete</h2>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:10px">Tippe zum An-/Abwählen. Grau = nicht verfügbar für diese Klasse.</p>
+      <div class="topic-grid" id="topic-grid">
+        <div class="topic-chip active" data-topic="add" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">+ Addition</div>
+        <div class="topic-chip active" data-topic="sub" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">− Subtraktion</div>
+        <div class="topic-chip active" data-topic="mul" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">× Multiplikation</div>
+        <div class="topic-chip active" data-topic="div" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">÷ Division</div>
+        <div class="topic-chip active" data-topic="mul_table" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">🔢 Kleines 1×1</div>
+        <div class="topic-chip" data-topic="big_mul" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">🔢 Großes 1×1</div>
+        <div class="topic-chip" data-topic="order_ops" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">( ) Vorrangregeln</div>
+        <div class="topic-chip" data-topic="squares" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">x² Quadratzahlen</div>
+        <div class="topic-chip disabled" data-topic="negative" data-grades="7,8,9,10" onclick="toggleChip(this)">± Negative Zahlen</div>
+        <div class="topic-chip disabled" data-topic="fractions" data-grades="6,7,8,9,10" onclick="toggleChip(this)">⅓ Bruchrechnung</div>
+        <div class="topic-chip" data-topic="decimals" data-grades="6,7,8,9,10" onclick="toggleChip(this)">0,5 Dezimalzahlen</div>
+        <div class="topic-chip disabled" data-topic="percent" data-grades="7,8,9,10" onclick="toggleChip(this)">% Prozentrechnen</div>
+        <div class="topic-chip disabled" data-topic="roots" data-grades="9,10" onclick="toggleChip(this)">√ Wurzeln</div>
+        <div class="topic-chip disabled" data-topic="powers" data-grades="9,10" onclick="toggleChip(this)">aⁿ Potenzen</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;padding-bottom:20px">
+      <button class="btn btn-start" id="btn-start" onclick="startQuiz()" style="flex:1;min-width:140px">▶ Training starten</button>
+      <button class="btn btn-start" id="btn-print" onclick="generateWorksheet()" style="flex:1;min-width:140px;background:var(--text)">🖨 Arbeitsblatt erstellen</button>
+    </div>
+
+  </div>
+
+  <!-- ══ QUIZ ══ -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-hud">
+      <div class="hud-item">
+        <div class="hud-label">Aufgabe</div>
+        <div class="hud-value" id="hud-nr">1/20</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">Richtig</div>
+        <div class="hud-value" id="hud-correct" style="color:var(--correct)">0</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">Falsch</div>
+        <div class="hud-value" id="hud-wrong" style="color:var(--wrong)">0</div>
+      </div>
+      <div class="hud-item">
+        <div class="hud-label">Zeit</div>
+        <div class="hud-value timer" id="hud-timer">–</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+    <div class="question-card">
+      <div class="question-category" id="q-category">ADDITION</div>
+      <div class="question-text" id="q-text">24 + 37 = ?</div>
+    </div>
+
+    <div class="answer-area">
+      <input type="text" class="answer-input" id="answer-input" autocomplete="off" inputmode="text" placeholder="?">
+      <button class="btn btn-check" id="btn-check" onclick="checkAnswer()">OK</button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+    <div class="hint-text" id="hint-text">Enter drücken zum Bestätigen</div>
+  </div>
+
+  <!-- ══ RESULTS ══ -->
+  <div id="screen-results" class="screen">
+    <div class="result-hero">
+      <div class="result-emoji" id="r-emoji">🎉</div>
+      <div class="result-title" id="r-title">Super gemacht!</div>
+      <div class="result-sub" id="r-sub">16 von 20 richtig</div>
+    </div>
+
+    <div class="result-stats">
+      <div class="stat-card">
+        <div class="stat-value green" id="r-correct">16</div>
+        <div class="stat-label">Richtig</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value red" id="r-wrong">4</div>
+        <div class="stat-label">Falsch</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="r-pct">80%</div>
+        <div class="stat-label">Quote</div>
+      </div>
+    </div>
+
+    <div class="result-detail">
+      <h3>Alle Aufgaben</h3>
+      <div id="r-list"></div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn btn-secondary" onclick="showScreen('setup')">⚙ Einstellungen</button>
+      <button class="btn btn-start" onclick="startQuiz()" style="margin-top:0">▶ Nochmal</button>
+    </div>
+  </div>
+
+  <!-- ══ WORKSHEET (Print) ══ -->
+  <div id="screen-worksheet" class="screen">
+    <div class="ws-toolbar no-print">
+      <button class="btn btn-secondary" onclick="showScreen('setup')">← Zurück</button>
+      <button class="btn btn-secondary" onclick="generateWorksheet()">🔄 Neue Aufgaben</button>
+      <label class="lbl" style="margin:0;display:flex;align-items:center;gap:6px">
+        <input type="checkbox" id="ws-show-lines" checked onchange="toggleLines()"> Antwortlinien
+      </label>
+      <label class="lbl" style="margin:0;display:flex;align-items:center;gap:6px">
+        Spalten:
+        <select id="ws-cols" onchange="rerenderWorksheet()" style="width:auto;padding:4px 8px">
+          <option value="1">1</option>
+          <option value="2" selected>2</option>
+          <option value="3">3</option>
+        </select>
+      </label>
+      <button class="btn btn-start" onclick="window.print()" style="margin-top:0;padding:10px 24px">🖨 Drucken</button>
+    </div>
+    <div id="ws-content"></div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════
+//  TOPICS & GENERATORS
+// ══════════════════════════════════════════════════
+
+const TOPICS = {
+  'add':       { label: 'Addition',           icon: '+',  grades: [5,6,7,8,9,10] },
+  'sub':       { label: 'Subtraktion',        icon: '−',  grades: [5,6,7,8,9,10] },
+  'mul':       { label: 'Multiplikation',     icon: '×',  grades: [5,6,7,8,9,10] },
+  'div':       { label: 'Division',           icon: '÷',  grades: [5,6,7,8,9,10] },
+  'mul_table': { label: 'Kleines 1×1',        icon: '🔢', grades: [5,6,7,8,9,10] },
+  'big_mul':   { label: 'Großes 1×1',         icon: '🔢', grades: [5,6,7,8,9,10] },
+  'order_ops': { label: 'Vorrangregeln',      icon: '( )', grades: [5,6,7,8,9,10] },
+  'squares':   { label: 'Quadratzahlen',      icon: 'x²', grades: [5,6,7,8,9,10] },
+  'negative':  { label: 'Negative Zahlen',    icon: '±',  grades: [7,8,9,10] },
+  'fractions': { label: 'Bruchrechnung',      icon: '⅓',  grades: [6,7,8,9,10] },
+  'decimals':  { label: 'Dezimalzahlen',      icon: '0,5',grades: [6,7,8,9,10] },
+  'percent':   { label: 'Prozentrechnen',     icon: '%',  grades: [7,8,9,10] },
+  'roots':     { label: 'Wurzeln',            icon: '√',  grades: [9,10] },
+  'powers':    { label: 'Potenzen',           icon: 'aⁿ', grades: [9,10] },
+};
+
+const selectedTopics = new Set();
+
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+function pick(arr) { return arr[rand(0, arr.length - 1)]; }
+function round2(n) { return Math.round(n * 100) / 100; }
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a; }
+
+function getRange() {
+  const r = document.getElementById('s-range').value;
+  const kl = +document.getElementById('s-klasse').value;
+  const ku = document.getElementById('s-kurs').value;
+  if (r === 'small') return { lo: 1, hi: 20 };
+  if (r === 'medium') return { lo: 1, hi: 100 };
+  if (r === 'large') return { lo: 1, hi: 1000 };
+  // auto
+  const base = { 5: 100, 6: 200, 7: 500, 8: 500, 9: 1000, 10: 1000 }[kl] || 100;
+  const factor = { C: 0.5, B: 1, A: 1.5 }[ku] || 1;
+  return { lo: 1, hi: Math.round(base * factor) };
+}
+
+function kursMultiplier() {
+  return { C: 0.7, B: 1, A: 1.4 }[document.getElementById('s-kurs').value] || 1;
+}
+
+// ── Generators: each returns { display, answer, category } ──
+
+function genAdd() {
+  const { lo, hi } = getRange();
+  const a = rand(lo, hi), b = rand(lo, hi);
+  return { display: `${a} + ${b}`, answer: String(a + b), category: 'Addition' };
+}
+
+function genSub() {
+  const { lo, hi } = getRange();
+  let a = rand(lo, hi), b = rand(lo, hi);
+  const kl = +document.getElementById('s-klasse').value;
+  if (kl < 7 && a < b) [a, b] = [b, a]; // no negatives below grade 7
+  return { display: `${a} − ${b}`, answer: String(a - b), category: 'Subtraktion' };
+}
+
+function genMul() {
+  const km = kursMultiplier();
+  const hi = Math.round(20 * km);
+  const a = rand(2, hi), b = rand(2, Math.min(hi, 15));
+  return { display: `${a} × ${b}`, answer: String(a * b), category: 'Multiplikation' };
+}
+
+function genDiv() {
+  const km = kursMultiplier();
+  const hi = Math.round(15 * km);
+  const b = rand(2, hi);
+  const result = rand(2, Math.round(20 * km));
+  const a = b * result;
+  return { display: `${a} ÷ ${b}`, answer: String(result), category: 'Division' };
+}
+
+function genMulTable() {
+  const a = rand(2, 10), b = rand(2, 10);
+  return { display: `${a} × ${b}`, answer: String(a * b), category: 'Kleines 1×1' };
+}
+
+function genBigMul() {
+  const a = rand(11, 20), b = rand(2, 20);
+  return { display: `${a} × ${b}`, answer: String(a * b), category: 'Großes 1×1' };
+}
+
+function genOrderOps() {
+  const km = kursMultiplier();
+  const t = rand(1, 4);
+  let display, answer;
+  if (t === 1) {
+    const a = rand(2, 10), b = rand(2, 8), c = rand(1, 10);
+    display = `${a} + ${b} × ${c}`;
+    answer = String(a + b * c);
+  } else if (t === 2) {
+    const a = rand(2, 15), b = rand(2, 8), c = rand(1, 8);
+    display = `${a} − ${b} × ${c}`;
+    answer = String(a - b * c);
+  } else if (t === 3) {
+    const a = rand(2, 8), b = rand(2, 8), c = rand(2, 6);
+    display = `(${a} + ${b}) × ${c}`;
+    answer = String((a + b) * c);
+  } else {
+    const a = rand(10, 30), b = rand(2, 6), c = rand(2, 6);
+    display = `${a} − (${b} + ${c})`;
+    answer = String(a - (b + c));
+  }
+  return { display, answer, category: 'Vorrangregeln' };
+}
+
+function genSquares() {
+  if (Math.random() < 0.5) {
+    // square it: 1² to 20²
+    const n = rand(1, 20);
+    return { display: `${n}²`, answer: String(n * n), category: 'Quadratzahlen' };
+  } else {
+    // perfect square root: √1 to √400
+    const n = rand(1, 20);
+    return { display: `√${n * n}`, answer: String(n), category: 'Quadratzahlen' };
+  }
+}
+
+function genNegative() {
+  const t = rand(1, 4);
+  let a, b, display, answer;
+  if (t === 1) {
+    a = rand(-20, 20); b = rand(-20, 20);
+    display = `(${a}) + (${b})`;
+    answer = String(a + b);
+  } else if (t === 2) {
+    a = rand(-20, 20); b = rand(-20, 20);
+    display = `(${a}) − (${b})`;
+    answer = String(a - b);
+  } else if (t === 3) {
+    a = rand(-10, 10); b = rand(-10, 10);
+    if (a === 0) a = -3; if (b === 0) b = 5;
+    display = `(${a}) × (${b})`;
+    answer = String(a * b);
+  } else {
+    b = rand(2, 10) * (Math.random() < 0.5 ? -1 : 1);
+    const res = rand(-10, 10); if (res === 0) res = 3;
+    a = b * res;
+    display = `(${a}) ÷ (${b})`;
+    answer = String(a / b);
+  }
+  return { display, answer, category: 'Negative Zahlen' };
+}
+
+function genFractions() {
+  const km = kursMultiplier();
+  const t = rand(1, 5);
+  let display, answer;
+
+  if (t <= 2) {
+    // add/sub fractions
+    const d = pick([2, 3, 4, 5, 6, 8, 10]);
+    const n1 = rand(1, d - 1), n2 = rand(1, d - 1);
+    const op = t === 1 ? '+' : '−';
+    const res = t === 1 ? n1 + n2 : n1 - n2;
+    const g = gcd(Math.abs(res), d);
+    const rn = res / g, rd = d / g;
+    display = `<span class="frac"><span class="frac-num">${n1}</span><span class="frac-den">${d}</span></span> ${op} <span class="frac"><span class="frac-num">${n2}</span><span class="frac-den">${d}</span></span>`;
+    if (rd === 1) answer = String(rn);
+    else answer = `${rn}/${rd}`;
+    return { display, answer, category: 'Bruchrechnung', html: true };
+  } else if (t === 3) {
+    // multiply fractions
+    const d1 = pick([2, 3, 4, 5]), n1 = rand(1, d1 * 2);
+    const d2 = pick([2, 3, 4, 5]), n2 = rand(1, d2);
+    const rn = n1 * n2, rd = d1 * d2;
+    const g = gcd(rn, rd);
+    display = `<span class="frac"><span class="frac-num">${n1}</span><span class="frac-den">${d1}</span></span> × <span class="frac"><span class="frac-num">${n2}</span><span class="frac-den">${d2}</span></span>`;
+    if (rd / g === 1) answer = String(rn / g);
+    else answer = `${rn / g}/${rd / g}`;
+    return { display, answer, category: 'Bruchrechnung', html: true };
+  } else if (t === 4) {
+    // fraction to decimal
+    const pairs = [[1,2],[1,4],[3,4],[1,5],[2,5],[3,5],[4,5],[1,8],[3,8],[5,8],[7,8],[1,10],[3,10],[7,10],[9,10],[1,3],[2,3]];
+    const [n, d] = pick(pairs);
+    const dec = round2(n / d);
+    if (Math.random() < 0.5) {
+      display = `<span class="frac"><span class="frac-num">${n}</span><span class="frac-den">${d}</span></span> = ?  (Dezimal)`;
+      answer = String(dec).replace('.', ',');
+      // Also accept with dot
+      return { display, answer, category: 'Bruchrechnung', html: true, altAnswers: [String(dec)] };
+    } else {
+      display = `${String(dec).replace('.', ',')} = ?  (Bruch)`;
+      answer = `${n}/${d}`;
+      return { display, answer, category: 'Bruchrechnung', html: false };
+    }
+  } else {
+    // simplify
+    const factor = rand(2, 6);
+    const n = rand(1, 8), d = rand(n + 1, 12);
+    const g = gcd(n, d);
+    display = `Kürze: <span class="frac"><span class="frac-num">${n * factor}</span><span class="frac-den">${d * factor}</span></span>`;
+    answer = `${n / g}/${d / g}`;
+    return { display, answer, category: 'Bruchrechnung', html: true };
+  }
+}
+
+function genDecimals() {
+  const kl = +document.getElementById('s-klasse').value;
+  const ku = document.getElementById('s-kurs').value;
+  // Zahlenraum: C-Kurs immer bis 20, Kl. 6-8 bis 20, sonst bis 50
+  const maxN = (ku === 'C' || (kl >= 6 && kl <= 8)) ? 20 : 50;
+  const t = rand(1, 3);
+  if (t === 1) {
+    // Addition
+    const a = round2(rand(1, maxN - 1) + rand(0, 9) / 10);
+    const b = round2(rand(1, maxN - 1) + rand(0, 9) / 10);
+    const res = round2(a + b);
+    return { display: `${String(a).replace('.', ',')} + ${String(b).replace('.', ',')}`, answer: String(res).replace('.', ','), category: 'Dezimalzahlen', altAnswers: [String(res)] };
+  } else if (t === 2) {
+    // Subtraktion
+    let a = round2(rand(2, maxN) + rand(0, 9) / 10);
+    let b = round2(rand(1, maxN - 1) + rand(0, 9) / 10);
+    if (a < b) [a, b] = [b, a];
+    const res = round2(a - b);
+    return { display: `${String(a).replace('.', ',')} − ${String(b).replace('.', ',')}`, answer: String(res).replace('.', ','), category: 'Dezimalzahlen', altAnswers: [String(res)] };
+  } else {
+    // Multiplikation mit ganzer Zahl
+    const a = round2(rand(1, Math.floor(maxN / 4)) + rand(0, 9) / 10);
+    const b = rand(2, 5);
+    const res = round2(a * b);
+    return { display: `${String(a).replace('.', ',')} × ${b}`, answer: String(res).replace('.', ','), category: 'Dezimalzahlen', altAnswers: [String(res)] };
+  }
+}
+
+function genPercent() {
+  const t = rand(1, 3);
+  if (t === 1) {
+    // % of value
+    const p = pick([5, 10, 15, 20, 25, 30, 40, 50, 75]);
+    const base = pick([50, 80, 100, 120, 150, 200, 250, 300, 400, 500, 600, 800, 1000]);
+    const res = round2(base * p / 100);
+    return { display: `${p}% von ${base}`, answer: String(res).replace('.', ','), category: 'Prozentrechnen', altAnswers: [String(res)] };
+  } else if (t === 2) {
+    // what percent
+    const base = pick([50, 100, 200, 250, 400, 500]);
+    const part = rand(1, base - 1);
+    const pct = round2(part / base * 100);
+    return { display: `${part} von ${base} = __%`, answer: String(pct).replace('.', ','), category: 'Prozentrechnen', altAnswers: [String(pct)] };
+  } else {
+    // find base
+    const p = pick([10, 20, 25, 50]);
+    const base = pick([40, 60, 80, 100, 120, 200, 300, 500]);
+    const part = base * p / 100;
+    return { display: `${part} sind ${p}% von __?`, answer: String(base), category: 'Prozentrechnen' };
+  }
+}
+
+function genRoots() {
+  const km = kursMultiplier();
+  if (Math.random() < 0.6) {
+    const n = rand(2, Math.round(20 * km));
+    return { display: `√${n * n}`, answer: String(n), category: 'Wurzeln' };
+  } else {
+    const a = rand(2, 8), b = rand(2, 5);
+    const n = a * a * b;
+    return { display: `√${n} vereinfachen`, answer: `${a}√${b}`, category: 'Wurzeln', altAnswers: [`${a}*√${b}`, `${a}*wurzel(${b})`] };
+  }
+}
+
+function genPowers() {
+  const t = rand(1, 4);
+  if (t === 1) {
+    const base = rand(2, 8), exp = rand(2, 4);
+    return { display: `${base}<sup>${exp}</sup>`, answer: String(Math.pow(base, exp)), category: 'Potenzen', html: true };
+  } else if (t === 2) {
+    const base = rand(2, 5);
+    return { display: `${base}<sup>0</sup>`, answer: '1', category: 'Potenzen', html: true };
+  } else if (t === 3) {
+    // multiply powers
+    const b = rand(2, 6), e1 = rand(1, 4), e2 = rand(1, 4);
+    const display = `${b}<sup>${e1}</sup> × ${b}<sup>${e2}</sup>`;
+    const answer = `${b}^${e1 + e2}`;
+    return { display, answer, category: 'Potenzen', html: true, altAnswers: [String(Math.pow(b, e1 + e2)), `${b}^${e1+e2}`] };
+  } else {
+    const b = rand(2, 5), e1 = rand(3, 7), e2 = rand(1, e1 - 1);
+    const display = `${b}<sup>${e1}</sup> ÷ ${b}<sup>${e2}</sup>`;
+    const answer = `${b}^${e1 - e2}`;
+    return { display, answer, category: 'Potenzen', html: true, altAnswers: [String(Math.pow(b, e1 - e2)), `${b}^${e1-e2}`] };
+  }
+}
+
+const GENERATORS = {
+  add: genAdd, sub: genSub, mul: genMul, div: genDiv,
+  mul_table: genMulTable, big_mul: genBigMul, order_ops: genOrderOps,
+  squares: genSquares, negative: genNegative, fractions: genFractions,
+  decimals: genDecimals, percent: genPercent, roots: genRoots, powers: genPowers,
+};
+
+// ══════════════════════════════════════════════════
+//  UI LOGIC
+// ══════════════════════════════════════════════════
+
+function toggleChip(el) {
+  if (el.classList.contains('disabled')) return;
+  const key = el.dataset.topic;
+  if (el.classList.contains('active')) {
+    el.classList.remove('active');
+    selectedTopics.delete(key);
+  } else {
+    el.classList.add('active');
+    selectedTopics.add(key);
+  }
+  updateStartBtn();
+}
+
+function updateTopics() {
+  const kl = +document.getElementById('s-klasse').value;
+  const chips = document.querySelectorAll('#topic-grid .topic-chip');
+  
+  selectedTopics.clear();
+  
+  chips.forEach(function(chip) {
+    const grades = chip.dataset.grades.split(',').map(Number);
+    const key = chip.dataset.topic;
+    
+    if (!grades.includes(kl)) {
+      chip.classList.add('disabled');
+      chip.classList.remove('active');
+    } else {
+      chip.classList.remove('disabled');
+      // Auto-select basic topics for the grade
+      var basics = ['add', 'sub', 'mul', 'div'];
+      if (kl <= 6) basics.push('mul_table');
+      if (basics.indexOf(key) >= 0) {
+        chip.classList.add('active');
+      }
+    }
+    
+    if (chip.classList.contains('active') && !chip.classList.contains('disabled')) {
+      selectedTopics.add(key);
+    }
+  });
+  
+  updateStartBtn();
+}
+
+function updateStartBtn() {
+  document.getElementById('btn-start').disabled = selectedTopics.size === 0;
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════
+//  QUIZ ENGINE
+// ══════════════════════════════════════════════════
+
+let questions = [];
+let currentIdx = 0;
+let correctCount = 0;
+let wrongCount = 0;
+let timerHandle = null;
+let timeLeft = 0;
+let results = [];
+
+function generateQuestions() {
+  const count = +document.getElementById('s-anzahl').value;
+  const topicKeys = [...selectedTopics];
+  questions = [];
+  for (let i = 0; i < count; i++) {
+    const key = topicKeys[i % topicKeys.length];
+    const gen = GENERATORS[key];
+    if (gen) {
+      let q = gen();
+      q.topic = key;
+      questions.push(q);
+    }
+  }
+  // shuffle
+  for (let i = questions.length - 1; i > 0; i--) {
+    const j = rand(0, i);
+    [questions[i], questions[j]] = [questions[j], questions[i]];
+  }
+}
+
+function startQuiz() {
+  if (selectedTopics.size === 0) return;
+  generateQuestions();
+  currentIdx = 0;
+  correctCount = 0;
+  wrongCount = 0;
+  results = [];
+  showScreen('quiz');
+  showQuestion();
+}
+
+function showQuestion() {
+  const q = questions[currentIdx];
+  const total = questions.length;
+
+  document.getElementById('hud-nr').textContent = `${currentIdx + 1}/${total}`;
+  document.getElementById('hud-correct').textContent = correctCount;
+  document.getElementById('hud-wrong').textContent = wrongCount;
+  document.getElementById('progress-fill').style.width = `${(currentIdx / total) * 100}%`;
+  document.getElementById('q-category').textContent = q.category.toUpperCase();
+
+  const qText = document.getElementById('q-text');
+  if (q.html) {
+    qText.innerHTML = q.display + ' = ?';
+  } else {
+    qText.textContent = q.display + ' = ?';
+  }
+
+  const inp = document.getElementById('answer-input');
+  inp.value = '';
+  inp.className = 'answer-input';
+  inp.disabled = false;
+  inp.focus();
+
+  document.getElementById('feedback').className = 'feedback';
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('hint-text').textContent = 'Enter drücken zum Bestätigen';
+  document.getElementById('btn-check').textContent = 'OK';
+  document.getElementById('btn-check').onclick = checkAnswer;
+
+  // timer
+  const limit = +document.getElementById('s-zeit').value;
+  clearInterval(timerHandle);
+  if (limit > 0) {
+    timeLeft = limit;
+    document.getElementById('hud-timer').textContent = timeLeft + 's';
+    timerHandle = setInterval(() => {
+      timeLeft--;
+      document.getElementById('hud-timer').textContent = timeLeft + 's';
+      if (timeLeft <= 5) document.getElementById('hud-timer').style.color = 'var(--danger)';
+      if (timeLeft <= 0) {
+        clearInterval(timerHandle);
+        checkAnswer(true);
+      }
+    }, 1000);
+    document.getElementById('hud-timer').style.color = 'var(--accent)';
+  } else {
+    document.getElementById('hud-timer').textContent = '–';
+  }
+}
+
+function normalize(s) {
+  return s.trim().replace(/\s+/g, '').replace(',', '.').replace('−', '-').toLowerCase();
+}
+
+function checkAnswer(timeout) {
+  clearInterval(timerHandle);
+  const q = questions[currentIdx];
+  const inp = document.getElementById('answer-input');
+  const userRaw = inp.value;
+  const userNorm = normalize(userRaw);
+  const correctNorm = normalize(q.answer);
+  const fb = document.getElementById('feedback');
+
+  let isCorrect = userNorm === correctNorm;
+  // check alt answers
+  if (!isCorrect && q.altAnswers) {
+    isCorrect = q.altAnswers.some(a => normalize(a) === userNorm);
+  }
+  // For fractions: also accept unsimplified or reversed comma/dot
+  if (!isCorrect && q.answer.includes('/')) {
+    const [cn, cd] = q.answer.split('/').map(Number);
+    const [un, ud] = userRaw.split('/').map(s => Number(s.trim()));
+    if (ud && cd && cn * ud === cd * un) isCorrect = true;
+  }
+
+  if (timeout && !userRaw.trim()) {
+    isCorrect = false;
+  }
+
+  inp.disabled = true;
+
+  if (isCorrect) {
+    correctCount++;
+    inp.className = 'answer-input correct';
+    fb.className = 'feedback correct';
+    fb.textContent = '✓ Richtig!';
+  } else {
+    wrongCount++;
+    inp.className = 'answer-input wrong';
+    fb.className = 'feedback wrong';
+    fb.textContent = timeout && !userRaw.trim()
+      ? `⏱ Zeit abgelaufen! Antwort: ${q.answer}`
+      : `✗ Falsch – richtig wäre: ${q.answer}`;
+  }
+
+  results.push({
+    display: q.display,
+    category: q.category,
+    userAnswer: userRaw || '–',
+    correctAnswer: q.answer,
+    isCorrect,
+    html: q.html
+  });
+
+  document.getElementById('hud-correct').textContent = correctCount;
+  document.getElementById('hud-wrong').textContent = wrongCount;
+
+  document.getElementById('hint-text').textContent = 'Enter drücken für nächste Aufgabe';
+  document.getElementById('btn-check').textContent = 'Weiter →';
+  document.getElementById('btn-check').onclick = nextQuestion;
+}
+
+function nextQuestion() {
+  currentIdx++;
+  if (currentIdx >= questions.length) {
+    showResults();
+  } else {
+    showQuestion();
+  }
+}
+
+function showResults() {
+  showScreen('results');
+  const total = questions.length;
+  const pct = Math.round(correctCount / total * 100);
+
+  let emoji, title;
+  if (pct >= 90) { emoji = '🏆'; title = 'Ausgezeichnet!'; }
+  else if (pct >= 75) { emoji = '🎉'; title = 'Super gemacht!'; }
+  else if (pct >= 60) { emoji = '👍'; title = 'Gut, weiter so!'; }
+  else if (pct >= 40) { emoji = '💪'; title = 'Übung macht den Meister!'; }
+  else { emoji = '📚'; title = 'Noch einmal versuchen!'; }
+
+  document.getElementById('r-emoji').textContent = emoji;
+  document.getElementById('r-title').textContent = title;
+  document.getElementById('r-sub').textContent = `${correctCount} von ${total} richtig`;
+  document.getElementById('r-correct').textContent = correctCount;
+  document.getElementById('r-wrong').textContent = wrongCount;
+  document.getElementById('r-pct').textContent = pct + '%';
+
+  const list = document.getElementById('r-list');
+  list.innerHTML = results.map((r, i) => {
+    const icon = r.isCorrect ? '✓' : '✗';
+    const iconCls = r.isCorrect ? 'color:var(--correct)' : 'color:var(--wrong)';
+    const displayText = r.html ? r.display.replace(/<[^>]*>/g, '') : r.display;
+    const userCls = r.isCorrect ? 'green' : 'red';
+    return `<div class="result-row">
+      <span class="result-icon" style="${iconCls}">${icon}</span>
+      <span class="result-q">${displayText}</span>
+      <span class="result-a ${userCls}">${r.userAnswer}</span>
+      ${!r.isCorrect ? `<span class="result-a green" style="font-size:11px">(${r.correctAnswer})</span>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── Keyboard handler ──
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    const quiz = document.getElementById('screen-quiz');
+    if (quiz.classList.contains('active')) {
+      document.getElementById('btn-check').click();
+    }
+  }
+});
+
+// ══════════════════════════════════════════════════
+//  WORKSHEET (Print mode)
+// ══════════════════════════════════════════════════
+
+let worksheetData = [];
+
+function generateWorksheet() {
+  if (selectedTopics.size === 0) return;
+  generateQuestions(); // reuse quiz generator
+  worksheetData = questions.map(q => {
+    // Convert HTML display to plain text for solutions
+    let plain = q.html 
+      ? q.display
+          .replace(/<span class="frac"><span class="frac-num">(\d+)<\/span><span class="frac-den">(\d+)<\/span><\/span>/g, '$1/$2')
+          .replace(/<sup>([^<]+)<\/sup>/g, '^$1')
+          .replace(/<[^>]*>/g, '')
+      : q.display;
+    // Convert HTML display for printing (keep fraction styling)
+    let printHtml = q.html
+      ? q.display
+          .replace(/<span class="frac">/g, '<span style="display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-size:0.7em;line-height:1.1;margin:0 3px">')
+          .replace(/<span class="frac-num">/g, '<span style="border-bottom:1.5px solid #333;padding:0 4px 1px">')
+          .replace(/<span class="frac-den">/g, '<span style="padding:1px 4px 0">')
+      : null;
+    return {
+      display: plain,
+      displayHtml: printHtml,
+      answer: q.answer,
+      category: q.category
+    };
+  });
+  showScreen('worksheet');
+  rerenderWorksheet();
+}
+
+function rerenderWorksheet() {
+  const cols = document.getElementById('ws-cols').value;
+  const showLines = document.getElementById('ws-show-lines').checked;
+  const kl = document.getElementById('s-klasse').value;
+  const ku = document.getElementById('s-kurs').value;
+  const kursLabel = { A: 'A-Kurs (Erweitert)', B: 'B-Kurs (Mittel)', C: 'C-Kurs (Grund)' }[ku] || ku;
+  const topicNames = [...selectedTopics].map(k => TOPICS[k]?.label).filter(Boolean).join(', ');
+  const today = new Date().toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+  const content = document.getElementById('ws-content');
+
+  // ── Aufgabenblatt ──
+  let aufgabenHtml = worksheetData.map((q, i) => {
+    const displayText = q.displayHtml || escHtml(q.display);
+    return `<div class="ws-item">
+      <span class="ws-item-nr">${i + 1})</span>
+      <span class="ws-item-q">${displayText} =</span>
+      ${showLines ? '<span class="ws-item-line"></span>' : ''}
+    </div>`;
+  }).join('');
+
+  // ── Lösungsblatt ──
+  let loesungHtml = worksheetData.map((q, i) => {
+    return `<div class="ws-sol-item">
+      <span class="ws-sol-nr">${i + 1})</span>
+      <span class="ws-sol-q">${escHtml(q.display)} =</span>
+      <span class="ws-sol-a">${escHtml(q.answer)}</span>
+    </div>`;
+  }).join('');
+
+  content.innerHTML = `
+    <div class="ws-page">
+      <div class="ws-header">
+        <div class="ws-header-left">
+          <h2>🦊 Zahlenfuchs – Kopfrechnen</h2>
+          <p>Klasse ${kl} · ${kursLabel}</p>
+        </div>
+        <div class="ws-header-right">
+          Carl-Kellner-Schule Braunfels<br>
+          ${topicNames}<br>
+          ${worksheetData.length} Aufgaben · ${today}
+        </div>
+      </div>
+      <div class="ws-name-line">
+        <span>Name: ____________________________</span>
+        <span>Datum: ____________</span>
+        <span>Punkte: _____ / ${worksheetData.length}</span>
+      </div>
+      <div class="ws-grid cols-${cols}">
+        ${aufgabenHtml}
+      </div>
+    </div>
+
+    <div class="ws-page">
+      <div class="ws-solution-title">Lösungen – Zahlenfuchs Klasse ${kl} · ${kursLabel}</div>
+      <div class="ws-solution-grid">
+        ${loesungHtml}
+      </div>
+    </div>
+  `;
+}
+
+function toggleLines() {
+  rerenderWorksheet();
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Init ──
+// Read initial active state from HTML
+document.querySelectorAll('#topic-grid .topic-chip.active').forEach(function(c) {
+  selectedTopics.add(c.dataset.topic);
+});
+updateStartBtn();
+
+</script>
+</body>
+</html>
