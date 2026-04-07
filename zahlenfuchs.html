@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zahlenfuchs 🦊 · Klasse 5–10</title>
+<link rel="apple-touch-icon" href="icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Zahlenfuchs">
-<title>Zahlenfuchs 🦊 · Klasse 5–10</title>
-<!-- Inline SVG Favicon -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%231b4332'/%3E%3Cstop offset='100%25' stop-color='%232d6a4f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='128' height='128' rx='28' fill='url(%23bg)'/%3E%3Ctext x='64' y='90' font-size='80' text-anchor='middle' font-family='sans-serif'%3E🦊%3C/text%3E%3C/svg%3E">
-<!-- Apple Touch Icon (base64 PNG generated from SVG) -->
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%231b4332'/%3E%3Cstop offset='100%25' stop-color='%232d6a4f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='180' height='180' rx='40' fill='url(%23bg)'/%3E%3Ctext x='90' y='125' font-size='110' text-anchor='middle' font-family='sans-serif'%3E🦊%3C/text%3E%3C/svg%3E">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1e3a5f">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -566,7 +565,7 @@ select:focus, input:focus { outline: none; border-color: var(--accent); }
 <div class="header">
   <span class="header-icon">🦊</span>
   <div>
-    <h1>Zahlenfuchs</h1>
+    <h1>Zahlenfuchs <span style="font-size:12px;font-weight:400;opacity:0.7">by Catha</span></h1>
     <p>Kopfrechentrainer · Klasse 5–10 · A/B/C-Kurs</p>
   </div>
 </div>
@@ -642,13 +641,13 @@ select:focus, input:focus { outline: none; border-color: var(--accent); }
         <div class="topic-chip active" data-topic="sub" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">− Subtraktion</div>
         <div class="topic-chip active" data-topic="mul" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">× Multiplikation</div>
         <div class="topic-chip active" data-topic="div" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">÷ Division</div>
-        <div class="topic-chip active" data-topic="mul_table" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">🔢 Kleines 1×1</div>
-        <div class="topic-chip" data-topic="big_mul" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">🔢 Großes 1×1</div>
-        <div class="topic-chip" data-topic="order_ops" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">( ) Vorrangregeln</div>
+        <div class="topic-chip active" data-topic="mul_table" data-grades="5,6" onclick="toggleChip(this)">🔢 Kleines 1×1</div>
+        <div class="topic-chip" data-topic="big_mul" data-grades="5,6,7" onclick="toggleChip(this)">🔢 Großes 1×1</div>
+        <div class="topic-chip" data-topic="order_ops" data-grades="5,6,7,8" onclick="toggleChip(this)">( ) Vorrangregeln</div>
         <div class="topic-chip" data-topic="squares" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">x² Quadratzahlen</div>
         <div class="topic-chip disabled" data-topic="negative" data-grades="7,8,9,10" onclick="toggleChip(this)">± Negative Zahlen</div>
         <div class="topic-chip disabled" data-topic="fractions" data-grades="6,7,8,9,10" onclick="toggleChip(this)">⅓ Bruchrechnung</div>
-        <div class="topic-chip" data-topic="decimals" data-grades="6,7,8,9,10" onclick="toggleChip(this)">0,5 Dezimalzahlen</div>
+        <div class="topic-chip" data-topic="decimals" data-grades="5,6,7,8" onclick="toggleChip(this)">0,5 Dezimalzahlen</div>
         <div class="topic-chip disabled" data-topic="percent" data-grades="7,8,9,10" onclick="toggleChip(this)">% Prozentrechnen</div>
         <div class="topic-chip disabled" data-topic="roots" data-grades="9,10" onclick="toggleChip(this)">√ Wurzeln</div>
         <div class="topic-chip disabled" data-topic="powers" data-grades="9,10" onclick="toggleChip(this)">aⁿ Potenzen</div>
@@ -765,13 +764,13 @@ const TOPICS = {
   'sub':       { label: 'Subtraktion',        icon: '−',  grades: [5,6,7,8,9,10] },
   'mul':       { label: 'Multiplikation',     icon: '×',  grades: [5,6,7,8,9,10] },
   'div':       { label: 'Division',           icon: '÷',  grades: [5,6,7,8,9,10] },
-  'mul_table': { label: 'Kleines 1×1',        icon: '🔢', grades: [5,6,7,8,9,10] },
-  'big_mul':   { label: 'Großes 1×1',         icon: '🔢', grades: [5,6,7,8,9,10] },
-  'order_ops': { label: 'Vorrangregeln',      icon: '( )', grades: [5,6,7,8,9,10] },
+  'mul_table': { label: 'Kleines 1×1',        icon: '🔢', grades: [5,6] },
+  'big_mul':   { label: 'Großes 1×1',         icon: '🔢', grades: [5,6,7] },
+  'order_ops': { label: 'Vorrangregeln',      icon: '( )', grades: [5,6,7,8] },
   'squares':   { label: 'Quadratzahlen',      icon: 'x²', grades: [5,6,7,8,9,10] },
   'negative':  { label: 'Negative Zahlen',    icon: '±',  grades: [7,8,9,10] },
   'fractions': { label: 'Bruchrechnung',      icon: '⅓',  grades: [6,7,8,9,10] },
-  'decimals':  { label: 'Dezimalzahlen',      icon: '0,5',grades: [6,7,8,9,10] },
+  'decimals':  { label: 'Dezimalzahlen',      icon: '0,5',grades: [5,6,7,8] },
   'percent':   { label: 'Prozentrechnen',     icon: '%',  grades: [7,8,9,10] },
   'roots':     { label: 'Wurzeln',            icon: '√',  grades: [9,10] },
   'powers':    { label: 'Potenzen',           icon: 'aⁿ', grades: [9,10] },
@@ -868,13 +867,14 @@ function genOrderOps() {
 }
 
 function genSquares() {
+  const km = kursMultiplier();
   if (Math.random() < 0.5) {
-    // square it: 1² to 20²
-    const n = rand(1, 20);
+    // square it
+    const n = rand(2, Math.round(15 * km));
     return { display: `${n}²`, answer: String(n * n), category: 'Quadratzahlen' };
   } else {
-    // perfect square root: √1 to √400
-    const n = rand(1, 20);
+    // perfect square root
+    const n = rand(2, Math.round(12 * km));
     return { display: `√${n * n}`, answer: String(n), category: 'Quadratzahlen' };
   }
 }
@@ -959,28 +959,21 @@ function genFractions() {
 }
 
 function genDecimals() {
-  const kl = +document.getElementById('s-klasse').value;
-  const ku = document.getElementById('s-kurs').value;
-  // Zahlenraum: C-Kurs immer bis 20, Kl. 6-8 bis 20, sonst bis 50
-  const maxN = (ku === 'C' || (kl >= 6 && kl <= 8)) ? 20 : 50;
   const t = rand(1, 3);
   if (t === 1) {
-    // Addition
-    const a = round2(rand(1, maxN - 1) + rand(0, 9) / 10);
-    const b = round2(rand(1, maxN - 1) + rand(0, 9) / 10);
+    const a = round2(rand(1, 50) + rand(1, 99) / 100);
+    const b = round2(rand(1, 50) + rand(1, 99) / 100);
     const res = round2(a + b);
     return { display: `${String(a).replace('.', ',')} + ${String(b).replace('.', ',')}`, answer: String(res).replace('.', ','), category: 'Dezimalzahlen', altAnswers: [String(res)] };
   } else if (t === 2) {
-    // Subtraktion
-    let a = round2(rand(2, maxN) + rand(0, 9) / 10);
-    let b = round2(rand(1, maxN - 1) + rand(0, 9) / 10);
+    let a = round2(rand(10, 80) + rand(1, 99) / 100);
+    let b = round2(rand(1, 40) + rand(1, 99) / 100);
     if (a < b) [a, b] = [b, a];
     const res = round2(a - b);
     return { display: `${String(a).replace('.', ',')} − ${String(b).replace('.', ',')}`, answer: String(res).replace('.', ','), category: 'Dezimalzahlen', altAnswers: [String(res)] };
   } else {
-    // Multiplikation mit ganzer Zahl
-    const a = round2(rand(1, Math.floor(maxN / 4)) + rand(0, 9) / 10);
-    const b = rand(2, 5);
+    const a = round2(rand(1, 15) + rand(1, 9) / 10);
+    const b = rand(2, 9);
     const res = round2(a * b);
     return { display: `${String(a).replace('.', ',')} × ${b}`, answer: String(res).replace('.', ','), category: 'Dezimalzahlen', altAnswers: [String(res)] };
   }
