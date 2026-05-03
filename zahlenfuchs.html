@@ -4,11 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Zahlenfuchs 🦊 · Klasse 5–10</title>
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Zahlenfuchs">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1e3a5f">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -565,7 +560,7 @@ select:focus, input:focus { outline: none; border-color: var(--accent); }
 <div class="header">
   <span class="header-icon">🦊</span>
   <div>
-    <h1>Zahlenfuchs <span style="font-size:12px;font-weight:400;opacity:0.7">by Catha</span></h1>
+    <h1>Zahlenfuchs</h1>
     <p>Kopfrechentrainer · Klasse 5–10 · A/B/C-Kurs</p>
   </div>
 </div>
@@ -635,22 +630,22 @@ select:focus, input:focus { outline: none; border-color: var(--accent); }
 
     <div class="setup-card">
       <h2><span>📚</span> Themengebiete</h2>
-      <p style="font-size:12px;color:var(--text3);margin-bottom:10px">Tippe zum An-/Abwählen. Grau = nicht verfügbar für diese Klasse.</p>
+      <p style="font-size:12px;color:var(--text3);margin-bottom:10px">Tippe zum An-/Abwählen. Grau = noch nicht für diese Klasse. Alle freigeschalteten Themen sind wählbar — auch aus niedrigeren Klassen.</p>
       <div class="topic-grid" id="topic-grid">
-        <div class="topic-chip active" data-topic="add" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">+ Addition</div>
-        <div class="topic-chip active" data-topic="sub" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">− Subtraktion</div>
-        <div class="topic-chip active" data-topic="mul" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">× Multiplikation</div>
-        <div class="topic-chip active" data-topic="div" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">÷ Division</div>
-        <div class="topic-chip active" data-topic="mul_table" data-grades="5,6" onclick="toggleChip(this)">🔢 Kleines 1×1</div>
-        <div class="topic-chip" data-topic="big_mul" data-grades="5,6,7" onclick="toggleChip(this)">🔢 Großes 1×1</div>
-        <div class="topic-chip" data-topic="order_ops" data-grades="5,6,7,8" onclick="toggleChip(this)">( ) Vorrangregeln</div>
-        <div class="topic-chip" data-topic="squares" data-grades="5,6,7,8,9,10" onclick="toggleChip(this)">x² Quadratzahlen</div>
-        <div class="topic-chip disabled" data-topic="negative" data-grades="7,8,9,10" onclick="toggleChip(this)">± Negative Zahlen</div>
-        <div class="topic-chip disabled" data-topic="fractions" data-grades="6,7,8,9,10" onclick="toggleChip(this)">⅓ Bruchrechnung</div>
-        <div class="topic-chip" data-topic="decimals" data-grades="5,6,7,8" onclick="toggleChip(this)">0,5 Dezimalzahlen</div>
-        <div class="topic-chip disabled" data-topic="percent" data-grades="7,8,9,10" onclick="toggleChip(this)">% Prozentrechnen</div>
-        <div class="topic-chip disabled" data-topic="roots" data-grades="9,10" onclick="toggleChip(this)">√ Wurzeln</div>
-        <div class="topic-chip disabled" data-topic="powers" data-grades="9,10" onclick="toggleChip(this)">aⁿ Potenzen</div>
+        <div class="topic-chip active" data-topic="add" data-min="5" onclick="toggleChip(this)">+ Addition</div>
+        <div class="topic-chip active" data-topic="sub" data-min="5" onclick="toggleChip(this)">− Subtraktion</div>
+        <div class="topic-chip active" data-topic="mul" data-min="5" onclick="toggleChip(this)">× Multiplikation</div>
+        <div class="topic-chip active" data-topic="div" data-min="5" onclick="toggleChip(this)">÷ Division</div>
+        <div class="topic-chip active" data-topic="mul_table" data-min="5" onclick="toggleChip(this)">🔢 Kleines 1×1</div>
+        <div class="topic-chip" data-topic="big_mul" data-min="5" onclick="toggleChip(this)">🔢 Großes 1×1</div>
+        <div class="topic-chip" data-topic="order_ops" data-min="5" onclick="toggleChip(this)">( ) Vorrangregeln</div>
+        <div class="topic-chip" data-topic="squares" data-min="5" onclick="toggleChip(this)">x² Quadratzahlen</div>
+        <div class="topic-chip" data-topic="decimals" data-min="5" onclick="toggleChip(this)">0,5 Dezimalzahlen</div>
+        <div class="topic-chip disabled" data-topic="fractions" data-min="6" onclick="toggleChip(this)">⅓ Bruchrechnung</div>
+        <div class="topic-chip disabled" data-topic="negative" data-min="7" onclick="toggleChip(this)">± Negative Zahlen</div>
+        <div class="topic-chip disabled" data-topic="percent" data-min="7" onclick="toggleChip(this)">% Prozentrechnen</div>
+        <div class="topic-chip disabled" data-topic="powers" data-min="8" onclick="toggleChip(this)">aⁿ Potenzen</div>
+        <div class="topic-chip disabled" data-topic="roots" data-min="9" onclick="toggleChip(this)">√ Wurzeln</div>
       </div>
     </div>
 
@@ -1063,31 +1058,43 @@ function toggleChip(el) {
 function updateTopics() {
   const kl = +document.getElementById('s-klasse').value;
   const chips = document.querySelectorAll('#topic-grid .topic-chip');
-  
+
+  // Default active topics per grade
+  const defaults = {
+    5:  ['add','sub','mul','div','mul_table'],
+    6:  ['add','sub','mul','div','mul_table','fractions','decimals'],
+    7:  ['add','sub','mul','div','negative','percent','decimals'],
+    8:  ['add','sub','mul','div','negative','percent','powers'],
+    9:  ['add','sub','mul','div','negative','percent','powers','roots'],
+    10: ['add','sub','mul','div','negative','percent','powers','roots'],
+  };
+  const active = defaults[kl] || ['add','sub','mul','div'];
+
   selectedTopics.clear();
-  
+
   chips.forEach(function(chip) {
-    const grades = chip.dataset.grades.split(',').map(Number);
+    const minGrade = +(chip.dataset.min || 5);
     const key = chip.dataset.topic;
-    
-    if (!grades.includes(kl)) {
+
+    if (kl < minGrade) {
+      // Grade too low → locked
       chip.classList.add('disabled');
       chip.classList.remove('active');
     } else {
+      // Available — set default selection
       chip.classList.remove('disabled');
-      // Auto-select basic topics for the grade
-      var basics = ['add', 'sub', 'mul', 'div'];
-      if (kl <= 6) basics.push('mul_table');
-      if (basics.indexOf(key) >= 0) {
+      if (active.indexOf(key) >= 0) {
         chip.classList.add('active');
+      } else {
+        chip.classList.remove('active');
       }
     }
-    
+
     if (chip.classList.contains('active') && !chip.classList.contains('disabled')) {
       selectedTopics.add(key);
     }
   });
-  
+
   updateStartBtn();
 }
 
